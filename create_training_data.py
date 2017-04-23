@@ -6,26 +6,27 @@ import cv2
 import time
 from getkeys import key_check
 import os
-
+import win32con
 
 def keys_to_output(keys):
     '''
     Convert keys to a ...multi-hot... array
 
-    [A,W,D] boolean values.
+    [UP , DOWN] boolean values.
     '''
-    output = [0,0,0]
-    
-    if 'A' in keys:
+    output = [0,0]
+    UP = win32con.VK_UP
+    DOWN = win32con.VK_DOWN
+    if UP in keys:
         output[0] = 1
-    elif 'D' in keys:
-        output[2] = 1
-    else:
+    elif DOWN in keys:
         output[1] = 1
     return output
 
 
 file_name = 'training_data.npy'
+
+up_pics = []
 
 if os.path.isfile(file_name):
     print('File exists, loading previous data!')
@@ -34,28 +35,39 @@ else:
     print('File does not exist, starting fresh!')
     training_data = []
 
-
 def main():
 
-    for i in list(range(4))[::-1]:
+    # Countdown
+    for i in list(range(7))[::-1]:
         print(i+1)
         time.sleep(1)
 
 
     paused = False
+
+    print("Training started!")
+    
     while(True):
 
         if not paused:
-            # 800x600 windowed mode
-            screen = grab_screen(region=(0,40,800,640))
+            # (380,150,970,290) windowed mode to extract just the chrome://dino screen.
+            screen = grab_screen(region=(380,150,970,290))
+            #print('loop took {} seconds'.format(time.time()-last_time))
             last_time = time.time()
             screen = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
-            screen = cv2.resize(screen, (160,120))
+            # Scaling the image to 250x60
             # resize to something a bit more acceptable for a CNN
+            screen = cv2.resize(screen, (250,60))
+            
             keys = key_check()
             output = keys_to_output(keys)
-            training_data.append([screen,output])
+            #print(output)
+
+            #if output == [1,0]:
+            #    up_pics.append(screen)
+            #np.save("UP_PICS.npy",up_pics)
             
+            training_data.append([screen,output])
             if len(training_data) % 1000 == 0:
                 print(len(training_data))
                 np.save(file_name,training_data)
