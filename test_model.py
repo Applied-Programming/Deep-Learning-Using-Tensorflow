@@ -8,7 +8,7 @@ from directkeys import PressKey,ReleaseKey, UP, DOWN
 from getkeys import key_check
 import random
 
-print("Loaded Alexnet")
+print("Loading Alexnet...")
 from alexnet import alexnet
 
 WIDTH = 250
@@ -35,38 +35,9 @@ def release():
     ReleaseKey(DOWN)
     ReleaseKey(UP)
     
-    
-"""
-def straight():
-##    if random.randrange(4) == 2:
-##        ReleaseKey(W)
-##    else:
-    PressKey(W)
-    ReleaseKey(A)
-    ReleaseKey(D)
-
-def left():
-    PressKey(W)
-    PressKey(A)
-    #ReleaseKey(W)
-    ReleaseKey(D)
-    #ReleaseKey(A)
-    time.sleep(t_time)
-    ReleaseKey(A)
-
-def right():
-    PressKey(W)
-    PressKey(D)
-    ReleaseKey(A)
-    #ReleaseKey(W)
-    #ReleaseKey(D)
-    time.sleep(t_time)
-    ReleaseKey(D)
-"""    
-    
 model = alexnet(WIDTH, HEIGHT, LR)
 model.load(MODEL_NAME)
-print("Loaded Alexnet")
+print("Loaded Alexnet.")
 
 def main():
     last_time = time.time()
@@ -88,21 +59,27 @@ def main():
             prediction = model.predict([screen.reshape(WIDTH,HEIGHT,1)])[0]
             moves = list(np.around(prediction))
             print(moves, prediction)
-
+            
             """
             thresh = .75
+            fwd_thresh = 0.70
 
+            #if prediction[0] > fwd_thresh:
+            #    straight()
+            
             if prediction[1] > thresh:
-                up
-            elif prediction[0] > thresh:
+                up()
+            elif prediction[2] > thresh:
                 down()
             else:
                 release()
             """
 
-            if moves == [1,0]:
+            if moves == [0,1,0]:
+                print("Jump")
                 up()
-            elif moves == [0,1]:
+            elif moves == [0,0,1]:
+                print("Duck")
                 down()
             else:
                 release()
