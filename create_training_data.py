@@ -12,15 +12,25 @@ def keys_to_output(keys):
     '''
     Convert keys to a ...multi-hot... array
 
-    [UP , DOWN] boolean values.
+    [None,UP,DOWN] boolean values.
     '''
-    output = [0,0]
+    output = [0,0,0]
+    
     UP = win32con.VK_UP
     DOWN = win32con.VK_DOWN
+    
+    '''
+    None = [100]
+    UP = [010]
+    DOWN = [001]
+    '''
+    
     if UP in keys:
-        output[0] = 1
-    elif DOWN in keys:
         output[1] = 1
+    elif DOWN in keys:
+        output[2] = 1
+    else:
+        output[0] = 1
     return output
 
 
@@ -61,9 +71,9 @@ def main():
             
             keys = key_check()
             output = keys_to_output(keys)
-            #print(output)
+            print(output)
 
-            #if output == [1,0]:
+            #if output == [0,1,0]:
             #    up_pics.append(screen)
             #np.save("UP_PICS.npy",up_pics)
             
