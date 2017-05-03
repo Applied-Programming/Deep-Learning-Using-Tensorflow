@@ -32,4 +32,3 @@ for i in range(EPOCHS):
     model.save(MODEL_NAME)
 
 # tensorboard --logdir=foo:C:/path/to/log
-# tensorboard --logdir=foo:C:\Users\HP\Desktop\PyDinoAI\log
