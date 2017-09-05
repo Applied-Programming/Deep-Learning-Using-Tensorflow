@@ -1,3 +1,5 @@
+<hr>
+
 # Deep Learning using Tensorflow
 
 Source code for Deep Learning demos at :
